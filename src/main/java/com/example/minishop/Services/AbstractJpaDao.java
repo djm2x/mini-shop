@@ -64,9 +64,9 @@ public abstract class AbstractJpaDao<T extends Serializable> {
 		return jinqDataProvider.streamAll(entityManager, args);
 	}
 
-	public JPAJinqStream<T> where(Class<T> args, JinqStream.Where<T, Exception> where) {
-		return jink(args).where(where);
-	}
+	// public JPAJinqStream<T> where(Class<T> args, JinqStream.Where<T, Exception> where) {
+	// 	return jink(args).where(where);
+	// }
 
 	/**
 	 * end jink
