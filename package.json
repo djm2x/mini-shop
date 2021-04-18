@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "f": "cd angular && ng serve --hmr --port 4200",
     "b": "mvn spring-boot:run",
     "install": "mvn dependency:resolve && mvn clean install"
   },

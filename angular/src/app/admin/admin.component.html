@@ -1,0 +1,54 @@
+<mat-toolbar color="primary" class="mat-elevation-z6">
+  <mat-toolbar-row>
+    <button mat-button (click)="snav.toggle()" routerLinkActive="active">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <img style="height: 35px; margin-right: 10px;" src="assets/favicon.png" alt="omran">
+    <span [routerLink]="['/admin']" routerLinkActive="active">{{(uow.config.items | async)?.appname}}</span>
+    
+    <app-menu *ngIf="!isMobileWidth"></app-menu>
+
+    <span style="flex: 1 1 auto;"></span>
+    <app-theme></app-theme>
+    <button mat-button [matMenuTriggerFor]="beforeMenu">
+      {{profile.name}} <b>({{profile.role}})</b>
+    </button>
+    <mat-menu #beforeMenu="matMenu" xPosition="before">
+      <!-- <button mat-menu-item (click)="openDialog()" >Info Compte</button> -->
+      <button mat-menu-item (click)="disconnect()">Se déconnecter</button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-sidenav-container #sidenav class="admin-sidenav-container" style=" z-index: 9; height: 100vh;">
+  <mat-sidenav #snav [mode]="isMobileWidth ? 'push' : 'side'" [opened]="isMobileWidth" [fixedInViewport]="true"
+    fixedTopGap="49.9">
+    <mat-nav-list class="list" style="width: 200px; padding: 0;">
+      <div class="logo">
+        <!-- <img [src]="displayImage(profile.image)" #img (error)="imgError(img)" alt="mourabit mohamed" width="100%"> -->
+        <img src="assets/logo-mini.png" #img (error)="imgError(img)" alt="mourabit mohamed" width="100%" class="my-2">
+      </div>
+      <mat-divider></mat-divider>
+      <!-- <mat-list-item [routerLink]="['/admin/dash']" routerLinkActive="router-active">
+        <span>Dash</span>
+        <mat-divider></mat-divider>
+      </mat-list-item> -->
+
+      <mat-accordion>
+
+        
+
+      </mat-accordion>
+      <mat-divider></mat-divider>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <main style="margin-top: 65px;">
+      <div class="ml-3 mr-3 mb-5">
+        <router-outlet #o="outlet"></router-outlet>
+      </div>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

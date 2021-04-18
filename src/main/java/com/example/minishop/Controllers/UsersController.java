@@ -38,7 +38,7 @@ public class UsersController {
             // Object o = uow.Practitioners.jink(Practitioner.class).where(e ->
             // e.isActive()).select(e -> e.getFirstname())
             // .toList();
-            return ResponseEntity.ok("");
+            return ResponseEntity.ok(list);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
