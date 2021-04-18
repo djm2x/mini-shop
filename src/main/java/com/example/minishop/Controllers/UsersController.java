@@ -2,26 +2,54 @@ package com.example.minishop.Controllers;
 
 
 
+import org.jinq.jpa.JPAJinqStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import lombok.var;
+
+import java.util.Map;
 
 import com.example.minishop.Models.*;
 import com.example.minishop.Services.*;
 
+// @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("api/users")
 public class UsersController {
 
     @Autowired
     private UowService uow;
+
+    @GetMapping("/getAll/{startIndex}/{pageSize}/{sortBy}/{sortDir}/{email}")
+    public ResponseEntity<?> GetAll(
+    @PathVariable Long startIndex
+    , Long pageSize
+    , @PathVariable String sortBy
+    , @PathVariable String sortDir
+    , @PathVariable String email) {
+
+        JPAJinqStream<User> q = uow.users.jink()
+            // .where(e -> email == "*" ? true : e.email.equals(email))
+            ;
+
+        var q2 = uow.users.findBy(query, params)
+
+        var count = q.count();
+
+        var list = q.toList();
+
+        return ResponseEntity.ok(Map.of("count", count, "list", list));
+    }
 
     @PostMapping("/post")
     public ResponseEntity<?> Post(@RequestBody User model) {
