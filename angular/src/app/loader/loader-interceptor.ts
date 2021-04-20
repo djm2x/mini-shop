@@ -62,7 +62,7 @@ export class LoaderInterceptor implements HttpInterceptor {
               // this.snackBar.notifyAlert(`${err.status}: ${err.statusText}`);
               console.log(err.status, err.statusText);
               // this.session.doSignOut();
-              this.router.navigate(['/auth']);
+              // this.router.navigate(['/auth']);
               this.snackBar.manageStatusCode(err.status);
             } else {
               // console.log(err);

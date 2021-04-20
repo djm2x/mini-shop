@@ -15,13 +15,13 @@ export class UpdateComponent implements OnInit, OnDestroy {
   myForm: FormGroup;
   o: User;
   title = '';
-  
 
-  
+
+
 
   /*{imagesInit}*/
 
-  
+
 
   constructor(public dialogRef: MatDialogRef<any>, @Inject(MAT_DIALOG_DATA) public data: any
     , private fb: FormBuilder, private uow: UowService) { }
@@ -30,12 +30,6 @@ export class UpdateComponent implements OnInit, OnDestroy {
     this.o = this.data.model;
     this.title = this.data.title;
     this.createForm();
-   
-    /*{imagesFrom}*/
-
-    setTimeout(() => {
-       /*{imagesTo}*/
-    }, 100);
   }
 
   onNoClick(): void {
@@ -44,14 +38,14 @@ export class UpdateComponent implements OnInit, OnDestroy {
 
   onOkClick(o: User): void {
     let sub = null;
-    if (o.id === 0) {
+    if (o.id === null) {
       sub = this.uow.users.post(o).subscribe(r => {
-        
+
         this.dialogRef.close(o);
       });
     } else {
       sub = this.uow.users.put(o.id, o).subscribe(r => {
-        
+
         this.dialogRef.close(o);
       });
     }
@@ -61,9 +55,9 @@ export class UpdateComponent implements OnInit, OnDestroy {
 
   createForm() {
     this.myForm = this.fb.group({
-      id: [this.o.id, [Validators.required, ]],
-email: [this.o.email, [Validators.required, Validators.email]],
-password: [this.o.password, [Validators.required, ]],
+      id: [this.o.id],
+      email: [this.o.email, [Validators.required, Validators.email]],
+      password: [this.o.password, [Validators.required,]],
 
     });
   }

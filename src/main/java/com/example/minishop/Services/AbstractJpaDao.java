@@ -3,9 +3,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.jinq.jpa.JPAJinqStream;
-import org.jinq.jpa.JinqJPAStreamProvider;
-import org.jinq.orm.stream.JinqStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
 
@@ -23,58 +20,8 @@ public abstract class AbstractJpaDao<T extends Serializable> {
 	@PersistenceContext
 	EntityManager entityManager;
 
-	private String idFieldName = "id";
-
-	/**
-	 * begin jink
-	 */
-
-	// @Autowired
-	private JinqJPAStreamProvider jinqDataProvider;
-
-	// protected abstract Class<T> entityType();
-
-	// public JPAJinqStream<T> stream() {
-	// 	return streamOf(entityType());
-	// }
-
-	// protected <U> JPAJinqStream<U> streamOf(Class<U> clazz) {
-	// 	return jinqDataProvider.streamAll(entityManager, clazz);
-	// }
-
-	// @SuppressWarnings("unchecked")
-	public JPAJinqStream<T> jink() {
-		// Class<T> genericType = (Class<T>)
-		// GenericTypeResolver.resolveTypeArgument(getClass(), (Class<T>)
-		// entityManager.getClass());
-		// Initialize Jinq
-		jinqDataProvider = new JinqJPAStreamProvider(entityManager.getMetamodel());
-
-		// Issue a query
-		return jinqDataProvider.streamAll(entityManager, this.clazz);
-		// return jinqDataProvider.streamAll(entityManager, (Class<T>)
-		// entityManager.getClass());
-	}
-
-	public JPAJinqStream<T> jink(Class<T> args) {
-		// Initialize Jinq
-		jinqDataProvider = new JinqJPAStreamProvider(entityManager.getMetamodel());
-
-		// Issue a query
-		return jinqDataProvider.streamAll(entityManager, args);
-	}
-
-	// public JPAJinqStream<T> where(Class<T> args, JinqStream.Where<T, Exception> where) {
-	// 	return jink(args).where(where);
-	// }
-
-	/**
-	 * end jink
-	 */
-
 	public void setClazz(Class<T> clazzToSet) {
 		this.clazz = clazzToSet;
-		this.idFieldName = this.getIdFieldName();
 	}
 
 	public T findOne(long id) {
@@ -83,6 +30,10 @@ public abstract class AbstractJpaDao<T extends Serializable> {
 
 	public List<T> findAll() {
 		return entityManager.createQuery("from " + this.clazz.getName()).getResultList();
+	}
+
+	public Query  createQuery(String query) {
+		return entityManager.createQuery(query);
 	}
 
 	// public List<T> findAll() {
@@ -162,18 +113,6 @@ public abstract class AbstractJpaDao<T extends Serializable> {
 
 	public void updateQuery(String query) {
 		entityManager.createQuery(query).executeUpdate();
-	}
-
-	private String getIdFieldName() {
-		String nameIdField = "";
-		for (Field field : clazz.getDeclaredFields()) {
-			String name = field.getName();
-			Annotation[] annotations = field.getDeclaredAnnotations();
-			if (annotations.length > 0 && annotations[0].toString().equals("@javax.persistence.Id()")) {
-				return name;
-			}
-		}
-		return nameIdField;
 	}
 
 }
