@@ -15,12 +15,13 @@ import com.example.minishop.Services.*;
 
 @RestController
 @RequestMapping("api/users")
-public class UsersController {
+public class UsersController extends GenericController<User> {
 
     // @Autowired
     private UowService uow;
 
-    public UsersController(UowService uow) {
+    public UsersController(UowService uow, GenericRepository<User> repository) {
+        super(repository);
         this.uow = uow;
     }
 
@@ -41,24 +42,24 @@ public class UsersController {
         return ResponseEntity.ok(Map.of("count", count, "list", query));
     }
 
-    @PostMapping("/post")
-    public ResponseEntity<?> Post(@RequestBody User model) {
-        return ResponseEntity.ok(uow.users.save(model));
-    }
+    // @PostMapping("/post")
+    // public ResponseEntity<?> Post(@RequestBody User model) {
+    //     return ResponseEntity.ok(uow.users.save(model));
+    // }
 
-    @GetMapping("/test/{id}")
-    public ResponseEntity<?> test(@PathVariable("id") Long id) {
+    // @GetMapping("/test/{id}")
+    // public ResponseEntity<?> test(@PathVariable("id") Long id) {
 
-        String[] list = { "Volvo", "BMW", "Ford", "Mazda" };
+    //     String[] list = { "Volvo", "BMW", "Ford", "Mazda" };
 
-        try {
-            // Object o = uow.Practitioners.jink(Practitioner.class).where(e ->
-            // e.isActive()).select(e -> e.getFirstname())
-            // .toList();
+    //     try {
+    //         // Object o = uow.Practitioners.jink(Practitioner.class).where(e ->
+    //         // e.isActive()).select(e -> e.getFirstname())
+    //         // .toList();
 
-            return ResponseEntity.ok(uow.users.findAll());
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+    //         return ResponseEntity.ok(uow.users.findAll());
+    //     } catch (Exception e) {
+    //         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    //     }
+    // }
 }
