@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.minishop.Services.GenericRepository;
-import com.example.minishop.Services.GenericService;
 
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
@@ -16,12 +15,9 @@ import org.springframework.web.client.HttpClientErrorException.NotFound;
 
 public class GenericController<T extends Serializable> {
 
-    // private final GenericService<T> service;
     protected final GenericRepository<T> repository;
 
-
     public GenericController(GenericRepository<T> repository) {
-        // this.service = new GenericService<T>(repository) {};
         this.repository = repository;
     }
 
@@ -67,7 +63,7 @@ public class GenericController<T extends Serializable> {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id){
+    public ResponseEntity<?> delete(@PathVariable Long id){
         repository.deleteById(id);
         
         return ResponseEntity.ok("Ok");

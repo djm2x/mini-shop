@@ -18,7 +18,7 @@ public class MiniShopApplication {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
 				registry
-				.addMapping("/**")
+				.addMapping("/**").allowedOrigins("*").allowedMethods("*")
 				// .allowedOrigins("http://localhost:4200")
 				;
 			}
