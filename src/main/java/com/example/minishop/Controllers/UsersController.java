@@ -1,47 +1,35 @@
 package com.example.minishop.Controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
-
-import javax.persistence.Query;
-
+import javax.persistence.EntityManager;
 import com.example.minishop.Models.*;
-import com.example.minishop.Services.*;
 
 @RestController
 @RequestMapping("api/users")
-public class UsersController extends GenericController<User> {
+public class UsersController extends SuperController<User> {
 
-    private UowService uow;
-
-    public UsersController(UowService uow, GenericRepository<User> repository) {
-        super(repository);
-        this.uow = uow;
+    public UsersController(EntityManager em) {
+        super(User.class, em);
     }
 
     @GetMapping("/getAll/{startIndex}/{pageSize}/{sortBy}/{sortDir}/{email}")
+    @Override
     public ResponseEntity<?> GetAll(@PathVariable int startIndex, @PathVariable int pageSize,
             @PathVariable String sortBy, @PathVariable String sortDir, @PathVariable String email) {
 
-        // Query query = uow.users.createQuery("From User");
-        // Query query = uow.users.createQuery("From User");
-        Object query = uow.users.createQuery("From User").setMaxResults(pageSize).getResultList();
+        Page<User> query = repository
+            .findAll((r, q, cb) -> email.equals("*") ? cb.and() : cb.like(r.get("email"), "%"+email+"%"), PageRequest.of(startIndex, pageSize))
+            ;
 
-        // Object r = repository.
+        List<User> list = query.getContent();
 
-        // var q2 = uow.users.findBy(query, params)
+        Long count = query.getTotalElements();
 
-        int count = 0;//(int) query.getSingleResult();
-
-        // Object list = query.setFirstResult(startIndex).setMaxResults(pageSize).getResultList();
-
-        return ResponseEntity.ok(Map.of("count", count, "list", query));
+        return ResponseEntity.ok(Map.of("count", count, "list", list));
     }
-
-    
 }

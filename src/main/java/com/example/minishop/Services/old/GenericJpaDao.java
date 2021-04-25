@@ -1,4 +1,4 @@
-package com.example.minishop.Services;
+package com.example.minishop.Services.old;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

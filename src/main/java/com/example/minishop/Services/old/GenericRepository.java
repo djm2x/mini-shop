@@ -1,4 +1,4 @@
-package com.example.minishop.Services;
+package com.example.minishop.Services.old;
 
 import java.io.Serializable;
 import org.springframework.data.jpa.repository.JpaRepository;
