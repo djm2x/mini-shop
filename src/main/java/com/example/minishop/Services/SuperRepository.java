@@ -13,4 +13,5 @@ public class SuperRepository<T extends Serializable> extends SimpleJpaRepository
     }
 
     // https://reflectoring.io/spring-data-specifications/
+    // https://ultimate.systems/web/blog/generic-controllers-and-services-in-spring-boot-java
 }
