@@ -14,12 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 public class SuperController<T extends Serializable> {
 
-    protected final EntityManager em;
-
     protected final SuperRepository<T> repository;
 
     public SuperController(Class<T> domainClass, EntityManager em) {
-        this.em = em;
         this.repository = new SuperRepository<T>(domainClass, em);
     }
 
