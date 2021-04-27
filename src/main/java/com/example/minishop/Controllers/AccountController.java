@@ -18,7 +18,7 @@ import com.example.minishop.Models.*;
 import com.example.minishop.Services.JwtService;
 
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("api/accounts")
 public class AccountController extends SuperController<User> {
 
     private final JwtService jwtService;
@@ -29,7 +29,7 @@ public class AccountController extends SuperController<User> {
         this.jwtService = jwtTokenUtil;
     }
 
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserDto model) {
 
         Optional<User> user = repository.findOne((r, cq, cb) -> cb.and(
@@ -43,7 +43,7 @@ public class AccountController extends SuperController<User> {
             }
 
             if (user.get().password != model.password) {
-                return ResponseEntity.ok(Map.of("code", -1));
+                return ResponseEntity.ok(Map.of("code", -1, "message", "Password incorrect"));
             }
 
 
@@ -55,6 +55,31 @@ public class AccountController extends SuperController<User> {
 
 
             return ResponseEntity.ok(Map.of("token", token, "user", user.get()));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User model) {
+
+        Optional<User> userExiste = repository.findOne((r, cq, cb) -> cb.and(
+            cb.equal(r.get("email"), model.email)
+            ));
+            ;
+
+            if(userExiste.isPresent() == true){
+                return ResponseEntity.ok(Map.of("code", -1, "message", "Email already takking"));
+            }
+
+            User user = repository.save(model);
+
+
+            Map<String, Object> claims = new HashMap<>();
+
+            claims.put("email", user.email);
+
+            String token = jwtService.doGenerateToken(claims, user.email);
+
+
+            return ResponseEntity.ok(Map.of("token", token, "user", user));
     }
 }
 

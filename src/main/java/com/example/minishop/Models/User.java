@@ -18,5 +18,6 @@ public class User implements Serializable{
     // @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public String password;
 
-   
+    @Column
+    public String role;
 }
