@@ -16,6 +16,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import com.example.minishop.Models.*;
 import com.example.minishop.Services.JwtService;
+import com.example.minishop.Services.old.GenericRepository;
 
 @RestController
 @RequestMapping("api/accounts")
@@ -23,8 +24,8 @@ public class AccountController extends SuperController<User> {
 
     private final JwtService jwtService;
 
-    public AccountController(EntityManager em, JwtService jwtTokenUtil) {
-        super(User.class, em);
+    public AccountController(GenericRepository<User> repository, JwtService jwtTokenUtil) {
+        super(repository);
 
         this.jwtService = jwtTokenUtil;
     }

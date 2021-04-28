@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import com.example.minishop.Services.SuperRepository;
+import com.example.minishop.Services.old.GenericRepository;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -14,11 +16,18 @@ import org.springframework.web.bind.annotation.*;
 
 public class SuperController<T extends Serializable> {
 
-    protected final SuperRepository<T> repository;
+    // protected final SuperRepository<T> repository;
+    protected final GenericRepository<T> repository;
 
-    public SuperController(Class<T> domainClass, EntityManager em) {
-        this.repository = new SuperRepository<T>(domainClass, em);
+    public SuperController(GenericRepository<T> repository) {
+        this.repository = repository;
     }
+
+    // public SuperController(Class<T> domainClass, EntityManager em) {
+    //     this.repository = new SuperRepository<T>(domainClass, em);
+    // }
+
+
 
     @GetMapping("/getAll/{startIndex}/{pageSize}/{sortBy}/{sortDir}/{email}")
     public ResponseEntity<?> GetAll(@PathVariable int startIndex, @PathVariable int pageSize,
@@ -76,6 +85,6 @@ public class SuperController<T extends Serializable> {
     public ResponseEntity<?> delete(@PathVariable Long id){
         repository.deleteById(id);
         
-        return ResponseEntity.ok("Ok");
+        return ResponseEntity.ok(Boolean.TRUE);
     }
 }

@@ -24,16 +24,15 @@ import com.github.javafaker.Faker;
 public class DatabaseSeeder {
 
     // private Logger logger = Logger.getLogger(DatabaseSeeder.class);
-    // @Autowired 
-    // private SuperRepository<User> users;
-    private JpaRepository<User, Long> users;
+    @Autowired 
+    private GenericRepository<User> users;
 
     private final Faker faker = new Faker(new Locale("fr"));
 
 
-    public DatabaseSeeder(EntityManager em) {
+    public DatabaseSeeder() {
         // this.users = new SuperRepository<User>(User.class, em);
-        this.users = new SuperRepository<User>(User.class, em);
+        // this.users = new SuperRepository<User>(User.class, em);
     }
 
     @EventListener
@@ -52,7 +51,9 @@ public class DatabaseSeeder {
             e.role = i == 1 ? "admin" : "user";
             list.add(e);
 
+            users.save(e);
+
         }
-        users.saveAll(list);
+        // users.saveAll(list);
     }
 }

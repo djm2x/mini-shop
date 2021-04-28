@@ -8,13 +8,14 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import com.example.minishop.Models.*;
+import com.example.minishop.Services.old.GenericRepository;
 
 @RestController
 @RequestMapping("api/users")
 public class UsersController extends SuperController<User> {
 
-    public UsersController(EntityManager em) {
-        super(User.class, em);
+    public UsersController(GenericRepository<User> repository) {
+        super(repository);
     }
 
     @GetMapping("/getAll/{startIndex}/{pageSize}/{sortBy}/{sortDir}/{email}")
