@@ -1,4 +1,4 @@
-package com.example.minishop.Services.old;
+package com.example.minishop.Repositories.old;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;

@@ -6,16 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.EntityManager;
 import com.example.minishop.Models.*;
-import com.example.minishop.Services.old.GenericRepository;
+import com.example.minishop.Repositories.UowService;
 
 @RestController
 @RequestMapping("api/users")
-public class UsersController extends SuperController<User> {
+public class UsersController extends SuperController<User, Long> {
 
-    public UsersController(GenericRepository<User> repository) {
-        super(repository);
+    public UsersController(UowService uow) {
+        super(uow.users);
     }
 
     @GetMapping("/getAll/{startIndex}/{pageSize}/{sortBy}/{sortDir}/{email}")

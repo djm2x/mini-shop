@@ -16,8 +16,7 @@ import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 
-import com.example.minishop.Services.SuperRepository;
-import com.example.minishop.Services.old.GenericRepository;
+import com.example.minishop.Repositories.GenericRepository;
 import com.github.javafaker.Faker;
 
 @Component
@@ -25,7 +24,7 @@ public class DatabaseSeeder {
 
     // private Logger logger = Logger.getLogger(DatabaseSeeder.class);
     @Autowired 
-    private GenericRepository<User> users;
+    private GenericRepository<User, Long> users;
 
     private final Faker faker = new Faker(new Locale("fr"));
 
@@ -35,12 +34,12 @@ public class DatabaseSeeder {
         // this.users = new SuperRepository<User>(User.class, em);
     }
 
-    @EventListener
-    public void seed(ApplicationReadyEvent  event) {
-        AddUsers();
-    }
+    // @EventListener
+    // public void seed(ApplicationReadyEvent  event) {
+    //     AddUsers();
+    // }
 
-    private void AddUsers() {
+    public DatabaseSeeder AddUsers() {
         List<User> list = new ArrayList<User>();
         for (int i = 1; i <= 5; i++) {
             User e = new User();
@@ -54,6 +53,8 @@ public class DatabaseSeeder {
             users.save(e);
 
         }
+
+        return this;
         // users.saveAll(list);
     }
 }

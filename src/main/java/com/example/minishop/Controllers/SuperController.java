@@ -4,9 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javax.persistence.EntityManager;
-import com.example.minishop.Services.SuperRepository;
-import com.example.minishop.Services.old.GenericRepository;
+import com.example.minishop.Repositories.GenericRepository;
+import com.example.minishop.Repositories.GenericRepositoryImp;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,12 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-public class SuperController<T extends Serializable> {
+public class SuperController<T extends Serializable, ID> {
 
     // protected final SuperRepository<T> repository;
-    protected final GenericRepository<T> repository;
+    protected final GenericRepositoryImp<T, ID> repository;
 
-    public SuperController(GenericRepository<T> repository) {
+    public SuperController(GenericRepositoryImp<T, ID> repository) {
         this.repository = repository;
     }
 
@@ -48,7 +47,7 @@ public class SuperController<T extends Serializable> {
     }
 
     @GetMapping("/findById/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id){
+    public ResponseEntity<?> findById(@PathVariable ID id){
 
         Optional<T> model = repository.findById(id);
 
@@ -60,7 +59,7 @@ public class SuperController<T extends Serializable> {
     }
 
     @PutMapping("/put/{id}")
-    public ResponseEntity<?> put(@PathVariable Long id, @RequestBody T model){
+    public ResponseEntity<?> put(@PathVariable ID id, @RequestBody T model){
 
         Optional<T> optional = repository.findById(id);
 
@@ -82,7 +81,7 @@ public class SuperController<T extends Serializable> {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id){
+    public ResponseEntity<?> delete(@PathVariable ID id){
         repository.deleteById(id);
         
         return ResponseEntity.ok(Boolean.TRUE);
