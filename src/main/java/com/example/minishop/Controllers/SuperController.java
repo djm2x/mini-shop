@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import com.example.minishop.Repositories.GenericRepository;
-import com.example.minishop.Repositories.GenericRepositoryImp;
+import com.example.minishop.Repositories.old.SuperRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,18 +16,11 @@ import org.springframework.web.bind.annotation.*;
 
 public class SuperController<T extends Serializable, ID> {
 
-    // protected final SuperRepository<T> repository;
-    protected final GenericRepositoryImp<T, ID> repository;
+    protected final GenericRepository<T, ID> repository;
 
-    public SuperController(GenericRepositoryImp<T, ID> repository) {
-        this.repository = repository;
+    public SuperController(GenericRepository<T, ID> repository) {
+        this.repository = repository ;
     }
-
-    // public SuperController(Class<T> domainClass, EntityManager em) {
-    //     this.repository = new SuperRepository<T>(domainClass, em);
-    // }
-
-
 
     @GetMapping("/getAll/{startIndex}/{pageSize}/{sortBy}/{sortDir}/{email}")
     public ResponseEntity<?> GetAll(@PathVariable int startIndex, @PathVariable int pageSize,

@@ -31,7 +31,7 @@ export class AdminComponent implements OnInit {
 
   disconnect() {
     this.session.doSignOut();
-    this.router.navigate(['']);
+    this.router.navigate(['/auth']);
   }
 
   get profile() {

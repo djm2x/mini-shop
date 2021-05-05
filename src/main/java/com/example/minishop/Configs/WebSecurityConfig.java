@@ -1,4 +1,4 @@
-package com.example.minishop;
+package com.example.minishop.Configs;
 
 import java.util.Arrays;
 

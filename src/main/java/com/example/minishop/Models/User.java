@@ -3,6 +3,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import org.springframework.beans.factory.annotation.Required;
+
 @Entity
 @Table(name="Users")
 public class User implements Serializable{
@@ -20,4 +22,10 @@ public class User implements Serializable{
 
     @Column
     public String role;
+
+    @Column
+    public String nom;
+
+    @Column()
+    public boolean isActive;
 }

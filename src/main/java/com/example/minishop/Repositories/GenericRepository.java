@@ -17,13 +17,4 @@ public interface GenericRepository<T extends Serializable, ID > extends JpaRepos
     // Stream<User> findAllByName(String name);
 }
 
-// public class SuperRepository<T extends Serializable> extends SimpleJpaRepository<T, Long> /*implements GenericRepository<T> */{
 
-    
-//     public SuperRepository(Class<T> domainClass, EntityManager em) {
-//         super(domainClass, em);
-//     }
-
-//     // https://reflectoring.io/spring-data-specifications/
-//     // https://ultimate.systems/web/blog/generic-controllers-and-services-in-spring-boot-java
-// }

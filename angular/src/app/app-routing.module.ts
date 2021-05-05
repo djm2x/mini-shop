@@ -4,8 +4,8 @@ import { MyGuard } from './shared/my.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'admin', pathMatch: 'full' },
-  // { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule), },
-  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)/*, canActivate: [MyGuard]*/ },
+  { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule), },
+  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), canActivate: [MyGuard] },
 ];
 
 @NgModule({

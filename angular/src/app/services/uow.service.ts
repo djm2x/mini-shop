@@ -1,5 +1,6 @@
 
 import { Injectable } from '@angular/core';
+import { AccountService } from './account.service';
 import { ConfigService } from './config.service';
 import { UserService } from './user.service';
 
@@ -9,6 +10,7 @@ import { UserService } from './user.service';
 export class UowService {
   config = new ConfigService();
   users = new UserService();
+  accounts = new AccountService();
 
 
   years = [...Array(new Date().getFullYear() - 2015).keys()].map(e => 2015 + e + 1);
