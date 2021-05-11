@@ -1,4 +1,4 @@
-package com.example.minishop.Repositories.nouse;
+package com.example.minishop.repositories.nouse;
 
 import java.io.Serializable;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import com.example.minishop.Repositories.GenericRepository;
+import com.example.minishop.repositories.GenericRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

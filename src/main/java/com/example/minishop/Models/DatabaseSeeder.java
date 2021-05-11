@@ -1,3 +1,4 @@
+package com.example.minishop.models;
 // package com.example.minishop.Models;
 
 // import org.springframework.beans.factory.annotation.Autowired;

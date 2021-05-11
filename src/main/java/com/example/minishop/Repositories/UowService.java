@@ -1,10 +1,6 @@
-package com.example.minishop.Repositories;
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+package com.example.minishop.repositories;
 import javax.transaction.Transactional;
 
-import com.example.minishop.Models.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +27,7 @@ public class UowService {
 	// }
 
 	@Autowired
-    public GenericRepository<User, Long> users;
+    public UsersRepository users;
 
 	
 }

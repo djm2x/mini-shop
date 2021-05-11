@@ -1,24 +1,31 @@
-package com.example.minishop.Services;
+package com.example.minishop.configuration.security;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 
 @Component
-public class JwtService implements Serializable {
+public class JwtTokenUtil implements Serializable {
 
 	public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
 
 	@Value("${jwt.secret}")
 	private String secret;
+
+    // private final String jwtSecret = "zdtlD3JK56m6wTTgsNFhqzjqP";
+    // private final String jwtIssuer = "example.io";
+
 
 	//retrieve username from jwt token
 	public String getUsernameFromToken(String token) {
@@ -69,8 +76,35 @@ public class JwtService implements Serializable {
 	}
 
 	//validate token
-	public Boolean validateToken(String token, Object userDetails) {
+	public Boolean validateToken(String token, UserDetails userDetails) {
 		final String username = getUsernameFromToken(token);
-		return (username.equals(userDetails/*.getUsername()*/) && !isTokenExpired(token));
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
 	}
+
+    public String getUsername(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject().split(",")[1];
+    }
+
+    public boolean validate(String token) {
+        try {
+            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            return true;
+        } catch (SignatureException ex) {
+        //     logger.error("Invalid JWT signature - {}", ex.getMessage());
+        // } catch (MalformedJwtException ex) {
+        //     logger.error("Invalid JWT token - {}", ex.getMessage());
+        // } catch (ExpiredJwtException ex) {
+        //     logger.error("Expired JWT token - {}", ex.getMessage());
+        // } catch (UnsupportedJwtException ex) {
+        //     logger.error("Unsupported JWT token - {}", ex.getMessage());
+        // } catch (IllegalArgumentException ex) {
+        //     logger.error("JWT claims string is empty - {}", ex.getMessage());
+        return false;
+        }
+    }
 }

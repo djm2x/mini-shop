@@ -1,4 +1,4 @@
-package com.example.minishop.Controllers;
+package com.example.minishop.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
-import com.example.minishop.Models.*;
-import com.example.minishop.Repositories.UowService;
-import com.example.minishop.Repositories.old.UserRepository;
+
+import com.example.minishop.models.*;
+import com.example.minishop.repositories.UowService;
 
 @RestController
 @RequestMapping("api/users")

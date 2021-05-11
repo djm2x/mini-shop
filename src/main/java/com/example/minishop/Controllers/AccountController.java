@@ -1,4 +1,4 @@
-package com.example.minishop.Controllers;
+package com.example.minishop.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -7,17 +7,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.example.minishop.Models.*;
-import com.example.minishop.Repositories.UowService;
-import com.example.minishop.Services.JwtService;
+import com.example.minishop.configuration.security.JwtTokenUtil;
+import com.example.minishop.models.User;
+import com.example.minishop.repositories.UowService;
 
 @RestController
 @RequestMapping("api/accounts")
 public class AccountController extends SuperController<User, Long> {
 
-    private final JwtService jwtService;
+    private final JwtTokenUtil jwtService;
 
-    public AccountController(UowService uow, JwtService jwtTokenUtil) {
+    public AccountController(UowService uow, JwtTokenUtil jwtTokenUtil) {
         super(uow.users);
 
         this.jwtService = jwtTokenUtil;
@@ -50,7 +50,7 @@ public class AccountController extends SuperController<User, Long> {
             String token = jwtService.doGenerateToken(claims, user.email);
 
 
-            return ResponseEntity.ok(Map.of("token", token, "user", user));
+            return ResponseEntity.ok(Map.of("token", token, "user", user, "message", "Connexion reussite"));
     }
 
     @PostMapping("/register")

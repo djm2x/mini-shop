@@ -1,4 +1,4 @@
-package com.example.minishop.Repositories.old;
+package com.example.minishop.repositories.old;
 
 import java.io.Serializable;
 

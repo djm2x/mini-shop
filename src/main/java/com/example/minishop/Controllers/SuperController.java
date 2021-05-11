@@ -1,12 +1,12 @@
-package com.example.minishop.Controllers;
+package com.example.minishop.controllers;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.example.minishop.Repositories.GenericRepository;
-import com.example.minishop.Repositories.old.SuperRepository;
+import com.example.minishop.repositories.GenericRepository;
+import com.example.minishop.repositories.old.SuperRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
