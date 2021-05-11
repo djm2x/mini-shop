@@ -8,16 +8,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.security.RolesAllowed;
+
+import com.example.minishop.configuration.security.JwtTokenUtil;
 import com.example.minishop.models.*;
 import com.example.minishop.repositories.UowService;
 
+@RolesAllowed({"admin", "user"})
 @RestController
 @RequestMapping("api/users")
 public class UsersController extends SuperController<User, Long> {
 
     // @Autowired
     // public UserRepository repository;
-
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    
     public UsersController(UowService uow) {
         super(uow.users);
         // this.repository = uow.users;
@@ -27,7 +33,7 @@ public class UsersController extends SuperController<User, Long> {
     //     super(uow.users1);
     // }
 
-
+    
     @GetMapping("/getAll/{startIndex}/{pageSize}/{sortBy}/{sortDir}/{email}")
     // @Override
     public ResponseEntity<?> GetAll(@PathVariable int startIndex, @PathVariable int pageSize,
@@ -40,6 +46,8 @@ public class UsersController extends SuperController<User, Long> {
         List<User> list = query.getContent();
 
         Long count = query.getTotalElements();
+
+        String t = jwtTokenUtil.getToken();
 
         return ResponseEntity.ok(Map.of("count", count, "list", list));
     }

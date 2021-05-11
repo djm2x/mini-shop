@@ -29,7 +29,7 @@ public class User implements UserDetails {
     public String role;
 
     @Column
-    public String nom;
+    public String username;
 
     @Column()
     public boolean isActive;
@@ -50,7 +50,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return nom;
+        return username;
     }
 
     @Override
