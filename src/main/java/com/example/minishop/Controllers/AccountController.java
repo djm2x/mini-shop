@@ -1,6 +1,7 @@
 package com.example.minishop.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.Data;
@@ -22,12 +23,14 @@ public class AccountController extends SuperController<User, Long> {
 
     private final JwtTokenUtil jwtTokenUtil;
     private final UowService uow;
+	private final BCryptPasswordEncoder pwEncoder;
 
-    public AccountController(UowService uow, JwtTokenUtil jwtTokenUtil) {
+    public AccountController(UowService uow, JwtTokenUtil jwtTokenUtil, BCryptPasswordEncoder bCryptPasswordEncoder) {
         super(uow.users);
 
         this.uow = uow;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.pwEncoder = bCryptPasswordEncoder;
     }
 
     @PostMapping("/login")
@@ -48,8 +51,8 @@ public class AccountController extends SuperController<User, Long> {
             }
 
             User user = op.get();
-
-            if (user.password.equals(model.password) == false) {
+            
+            if (pwEncoder.encode(user.password).equals(pwEncoder.encode(model.password)) == false) {
                 return ResponseEntity.ok(Map.of("code", -1, "message", "Password incorrect"));
             }
 
@@ -77,6 +80,8 @@ public class AccountController extends SuperController<User, Long> {
             if(userExiste.isPresent() == true){
                 return ResponseEntity.ok(Map.of("code", -1, "message", "Email already takking"));
             }
+
+            model.password = pwEncoder.encode(model.password);
 
             User user = repository.save(model);
 
