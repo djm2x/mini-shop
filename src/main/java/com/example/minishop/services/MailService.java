@@ -22,9 +22,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 @Service
-public class Mail {
+public class MailService {
 
-	private static final Logger logger = LoggerFactory.getLogger(Mail.class);
+	private static final Logger logger = LoggerFactory.getLogger(MailService.class);
 
 	private List<InternetAddress> receiver;
 	private String sender;
@@ -52,7 +52,7 @@ public class Mail {
 		List<InternetAddress> receiverList = new ArrayList<InternetAddress>();
 		receiverList.add(new InternetAddress(email));
 
-		Mail m = new Mail(receiverList, properties.getProperty("spring.mail.username"), "CREATE_ACCOUNT", inscriptionFile);
+		MailService m = new MailService(receiverList, properties.getProperty("spring.mail.username"), "CREATE_ACCOUNT", inscriptionFile);
 
 
 		m.setVariable("email_compte", email);
@@ -64,7 +64,7 @@ public class Mail {
 		}
 	}
 
-	public Mail(List<InternetAddress> receiver, String sender, String subject, String templateName) {
+	public MailService(List<InternetAddress> receiver, String sender, String subject, String templateName) {
 		super();
 		this.receiver = receiver;
 		this.sender = sender;
