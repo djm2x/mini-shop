@@ -39,6 +39,7 @@ export class SessionService {
   // se deconnecter
   public doSignOut(): void {
     this.user = new User();
+    this.token = '';
     localStorage.removeItem(USER);
     localStorage.removeItem(TOKEN);
   }

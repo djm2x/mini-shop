@@ -35,15 +35,6 @@ public class User implements UserDetails {
     public boolean isActive;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> list = new ArrayList<GrantedAuthority>();
-
-        list.add(new SimpleGrantedAuthority("ROLE_" + role));
-
-        return list;
-    }
-
-    @Override
     public String getPassword() {
         return password;
     }
@@ -71,5 +62,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return false;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 }

@@ -14,13 +14,13 @@ public class HtmlService {
 
     private static final Logger logger = LoggerFactory.getLogger(HtmlService.class);
 
-    public String prepareRegisterHtml(String action_url, String email, String supportEmail) {
+    public String prepareRegisterHtml(String action_url, String email/*, String supportEmail*/) {
         String fileName = "registration_user.html";
         String strHTML = readFile(fileName);
 
-        return strHTML.replace("{{" + action_url + "}}", action_url)
-            .replace("{{" + email + "}}", email)
-            .replace("{{" + supportEmail + "}}", supportEmail)
+        return strHTML.replace("{{action_url}}", action_url)
+            .replace("{{email}}", email)
+            // .replace("{{" + supportEmail + "}}", supportEmail)
             ;
     }
 

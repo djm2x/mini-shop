@@ -10,6 +10,8 @@ import com.example.minishop.repositories.old.SuperRepository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +28,9 @@ public class SuperController<T extends Serializable, ID> {
     public ResponseEntity<?> GetAll(@PathVariable int startIndex, @PathVariable int pageSize,
             @PathVariable String sortBy, @PathVariable String sortDir, @PathVariable String email) {
 
-        Page<T> query = repository.findAll(PageRequest.of(startIndex, pageSize));
+        Sort sort = Sort.by(sortDir == "desc" ? Sort.Direction.DESC : Sort.Direction.ASC, sortBy);
+
+        Page<T> query = repository.findAll(PageRequest.of(startIndex, pageSize, sort));
 
         List<T> list = query.getContent();
 
@@ -67,11 +71,13 @@ public class SuperController<T extends Serializable, ID> {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<T> post(@RequestBody T model){
-
-        T o = repository.save(model);
-
-        return ResponseEntity.ok(o);
+    public ResponseEntity<?> post(@RequestBody T model){
+        try {
+            T o = repository.saveAndFlush(model);
+            return ResponseEntity.ok(o);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/delete/{id}")

@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -26,6 +27,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+// @Configuration
+// @Order(1)
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -63,7 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Set password encoding schema
         @Bean
-        public PasswordEncoder passwordEncoder() {
+        public BCryptPasswordEncoder passwordEncoder() {
                 return new BCryptPasswordEncoder();
         }
 
@@ -88,6 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .permitAll().antMatchers(String.format("%s/**", swaggerPath)).permitAll()
                                 // Our public endpoints
                                 .antMatchers("/api/accounts/**").permitAll()
+                                .antMatchers("/api/seeds/**").permitAll()
                                 // .antMatchers(HttpMethod.GET, "/api/author/**").permitAll()
                                 // .antMatchers(HttpMethod.POST, "/api/author/search").permitAll()
                                 // .antMatchers(HttpMethod.GET, "/api/book/**").permitAll()

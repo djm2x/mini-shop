@@ -3,21 +3,10 @@ package com.example.minishop.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -26,82 +15,37 @@ public class MailService {
 
 	private static final Logger logger = LoggerFactory.getLogger(MailService.class);
 
-	private List<InternetAddress> receiver;
-	private String sender;
-	private String subject;
-	private String templateContent;
+	@Autowired
+	private Environment env;
 
 	@Autowired
-	private JavaMailSender mailService;
+	private JavaMailSender mailSender;
 
-	private static final Properties properties;
-
-	static {
-		properties = new Properties();
+	public boolean sendEmail(String email, String subject, String html) {
 		try {
-			File f = new ClassPathResource("application.properties").getFile();
-			properties.load(new FileInputStream(f));
-		} catch (Exception e) {
-			logger.error("Problème lors du chargement du fichier application.properties : ", e);
-		}
-	}
+			String sender = env.getProperty("senderEmail");
 
-	public void impl(String email) throws AddressException {
-		// Calcul du paramètre encrypté dans le lien
-		String inscriptionFile = "subscription_fr_fr.html";
-		List<InternetAddress> receiverList = new ArrayList<InternetAddress>();
-		receiverList.add(new InternetAddress(email));
+			String to = email; // "mail1@gmail.com , mail2@gmail.com, mail3@gmail.com";
+			InternetAddress[] receiverArray = InternetAddress.parse(to , true);
 
-		MailService m = new MailService(receiverList, properties.getProperty("spring.mail.username"), "CREATE_ACCOUNT", inscriptionFile);
+			MimeMessage mimeMessage = mailSender.createMimeMessage();
 
+			mimeMessage.setContent(html, "text/html; charset=ISO-8859-1");
 
-		m.setVariable("email_compte", email);
-
-		try {
-			m.send();
-		} catch (Exception e) {
-		 e.getMessage();
-		}
-	}
-
-	public MailService(List<InternetAddress> receiver, String sender, String subject, String templateName) {
-		super();
-		this.receiver = receiver;
-		this.sender = sender;
-		this.subject = subject;
-		try {
-			File f = new ClassPathResource("mails/" + templateName).getFile();
-			List<String> l = Files.readAllLines(f.toPath());
-			templateContent = String.join("\n", l);
-		} catch (Exception e) {
-			logger.error("Error while reading the template: ", e);
-		}
-	}
-
-	public void setVariable(String name, String value) {
-		templateContent = templateContent.replace("{{" + name + "}}", value);
-	}
-
-	public void send() {
-		try {
-			MimeMessage mimeMessage = mailService.createMimeMessage();
-			mimeMessage.setContent(templateContent, "text/html; charset=ISO-8859-1");
 			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, false, "ISO-8859-1");
-			if (Boolean.valueOf(properties.getProperty("com.sportvalue.mail.to.dev"))) {
-				receiver.add(new InternetAddress(properties.getProperty("com.sportvalue.dev.emails")));
-				InternetAddress[] receiverArray = receiver.toArray(new InternetAddress[receiver.size()]);
-				helper.setTo(receiverArray);
-			} else {
-				InternetAddress[] receiverArray = receiver.toArray(new InternetAddress[receiver.size()]);
-				helper.setTo(receiverArray);
-			}
+
+
+			helper.setTo(receiverArray);
 			helper.setSubject(subject);
 			helper.setFrom(sender);
-			mailService.send(mimeMessage);
+
+			mailSender.send(mimeMessage);
 		} catch (Exception e) {
 			logger.error("Problème lors de l'envoi de mail : ", e);
-
+			return false;
 		}
+
+		return true;
 	}
 
 }

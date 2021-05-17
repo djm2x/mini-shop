@@ -2,6 +2,8 @@ export class User {
   id = null;
   email = '';
   password = '';
-  nom = '';
-isActive = false;
+  nom = 'me&you';
+  isActive = false;
+  username = 'username';
+  role = 'user';
 }

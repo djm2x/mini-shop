@@ -16,13 +16,6 @@ export class UpdateComponent implements OnInit, OnDestroy {
   o: User;
   title = '';
 
-
-
-
-  /*{imagesInit}*/
-
-
-
   constructor(public dialogRef: MatDialogRef<any>, @Inject(MAT_DIALOG_DATA) public data: any
     , private fb: FormBuilder, private uow: UowService) { }
 
@@ -58,6 +51,10 @@ export class UpdateComponent implements OnInit, OnDestroy {
       id: [this.o.id],
       email: [this.o.email, [Validators.required, Validators.email]],
       password: [this.o.password, [Validators.required,]],
+      isActive: [this.o.isActive],
+      username: [this.o.username],
+      role: [this.o.role],
+      nom: [this.o.nom],
 
     });
   }
