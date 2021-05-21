@@ -39,4 +39,10 @@ export class AppComponent implements OnInit {
       localStorage.setItem('route', this.route);
     }
   }
+
+  test() {
+    const c = (window as any).getComponent('<app-user>');
+
+    console.log(c)
+  }
 }

@@ -25,7 +25,7 @@ export class LoaderInterceptor implements HttpInterceptor {
   percentage = 0;
 
   constructor(private loaderService: LoaderService, public router: Router
-    , public snackBar: SnackBarService , private session: SessionService
+    , public snackBar: SnackBarService, private session: SessionService
     , public dialog: DialogMessageService
   ) { }
 
@@ -33,9 +33,9 @@ export class LoaderInterceptor implements HttpInterceptor {
     this.cache = this.getCache();
     const isBackOffice = !this.router.url.includes('shop');
 
-    if (isBackOffice || (req.method !== 'GET')) {
-      return this.handleRequest(req, next);
-    }
+    // if (isBackOffice || (req.method !== 'GET')) {
+    //   return this.handleRequest(req, next);
+    // }
     const key = btoa(JSON.stringify(req));
 
     if (req.headers.get('reset')) {
@@ -43,10 +43,10 @@ export class LoaderInterceptor implements HttpInterceptor {
       this.setCache(this.cache);
     }
 
-    const cachedResponse: HttpResponse<any> = this.cache.get(key);
+    const cachedResponse = new HttpResponse<any>(this.cache.get(key));
 
     if (cachedResponse) {
-      return of(cachedResponse.clone()).pipe(delay(100))
+      return of(cachedResponse.clone())
     } else {
       return this.handleRequest(req, next).pipe(tap(stateEvent => {
         if (stateEvent instanceof HttpResponse) {
@@ -165,11 +165,11 @@ export class LoaderInterceptor implements HttpInterceptor {
     if (length === 0) {
       this.percentage = 100;
       this.max = 0;
-      this.loaderService.isLoading.next({isBegin: this.requests.length > 0, count: +this.percentage.toFixed(0)});
+      this.loaderService.isLoading.next({ isBegin: this.requests.length > 0, count: +this.percentage.toFixed(0) });
     } else {
       this.max = this.max > length ? this.max : length;
       this.percentage = 100 - ((length * 100) / this.max);
-      this.loaderService.isLoading.next({isBegin: true, count: +this.percentage.toFixed(0)});
+      this.loaderService.isLoading.next({ isBegin: true, count: +this.percentage.toFixed(0) });
     }
 
     // console.log(length, this.percentage)
