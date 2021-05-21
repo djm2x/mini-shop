@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   submit(o: User) {
-
+    this.session.token = null;
     this.uow.accounts.login(o).subscribe((r: any) => {
       if (r.code < 0) {
         this.snackBar.notifyAlert(400, r.message);

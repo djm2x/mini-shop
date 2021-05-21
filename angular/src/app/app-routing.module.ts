@@ -6,6 +6,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'admin', pathMatch: 'full' },
   { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule), },
   { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule), canActivate: [MyGuard] },
+  { path: '**', redirectTo: 'admin' }
 ];
 
 @NgModule({

@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { LoaderService } from './loader.service';
 import { Router } from '@angular/router';
 import { SnackBarService } from './snack-bar.service';
 import { SessionService } from '../shared';
 import { DialogMessageService } from './dialog-message.component';
+import { environment } from 'src/environments/environment';
+import { delay, tap } from 'rxjs/operators';
 // import { SessionService } from '../shared';
 
 @Injectable({
@@ -17,6 +19,8 @@ export class LoaderInterceptor implements HttpInterceptor {
   // i = 0;
   cachedRequests: Array<HttpRequest<any>> = [];
 
+  private cache: Map</*HttpRequest<any>*/ string, HttpResponse<any>> = new Map();
+
   max = 0;
   percentage = 0;
 
@@ -26,8 +30,51 @@ export class LoaderInterceptor implements HttpInterceptor {
   ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    this.cache = this.getCache();
+    const isBackOffice = !this.router.url.includes('shop');
 
+    if (isBackOffice || (req.method !== 'GET')) {
+      return this.handleRequest(req, next);
+    }
+    const key = btoa(JSON.stringify(req));
 
+    if (req.headers.get('reset')) {
+      this.cache.delete(key);
+      this.setCache(this.cache);
+    }
+
+    const cachedResponse: HttpResponse<any> = this.cache.get(key);
+
+    if (cachedResponse) {
+      return of(cachedResponse.clone()).pipe(delay(100))
+    } else {
+      return this.handleRequest(req, next).pipe(tap(stateEvent => {
+        if (stateEvent instanceof HttpResponse) {
+          this.cache.set(key, stateEvent.clone());
+          this.setCache(this.cache);
+        }
+      }));
+    }
+
+  }
+
+  setCache(map: Map<string, HttpResponse<any>>) {
+    localStorage.setItem('cache', JSON.stringify([...map]));
+  }
+
+  getCache() {
+    if (environment.production) {
+      return this.cache;
+    }
+    try {
+      const r = localStorage.getItem('cache');
+      return r ? new Map<string, HttpResponse<any>>(JSON.parse(r)) : this.cache;
+    } catch (error) {
+      return this.cache;
+    }
+  }
+
+  handleRequest(req: HttpRequest<any>, next: HttpHandler) {
     this.requests.push(req);
     this.calculPercentage(this.requests.length);
     //
@@ -62,7 +109,7 @@ export class LoaderInterceptor implements HttpInterceptor {
               // this.snackBar.notifyAlert(`${err.status}: ${err.statusText}`);
               console.log(err.status, err.statusText);
               // this.session.doSignOut();
-              // this.router.navigate(['/auth']);
+              this.router.navigate(['/auth']);
               this.snackBar.manageStatusCode(err.status);
             } else {
               // console.log(err);
