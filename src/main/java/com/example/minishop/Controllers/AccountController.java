@@ -40,6 +40,21 @@ public class AccountController extends SuperController<User, Long> {
         this.htmlService = htmlService;
     }
 
+    @PostMapping("/checkToken")
+    public ResponseEntity<?> checkToken(@RequestBody TokenDto tokenDto) {
+        String token = tokenDto.value;
+        boolean isOk = jwtTokenUtil.validate(token);
+
+        if (isOk == false) {
+            return ResponseEntity.ok(Map.of("isOk", false));
+        }
+
+        String email = jwtTokenUtil.getByClaim(token, "email");
+        String role = jwtTokenUtil.getByClaim(token, "role");
+        
+        return ResponseEntity.ok(Map.of("isOk", isOk, "email", email, "role", role));
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserDto model) {
 
@@ -110,4 +125,10 @@ class UserDto {
     public String email;
     // @NotNull
     public String password;
+}
+
+class TokenDto {
+    // @NotNull @Email
+    public String value;
+    // @NotNull
 }

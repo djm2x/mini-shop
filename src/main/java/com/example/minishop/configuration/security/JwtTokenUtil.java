@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -20,17 +21,18 @@ import io.jsonwebtoken.SignatureException;
 @Component
 public class JwtTokenUtil implements Serializable {
 
-	public static final long JWT_TOKEN_VALIDITY = 24 * 60 * 60;
-
 	@Value("${jwt.secret}")
 	private String secret;
+
+	// @Value("${jwt.refreshExpirationDateInMs}")
+	private int refreshExpirationDateInMs = 24 * 60 * 60 * 1000;
 
 	// private final String jwtSecret = "zdtlD3JK56m6wTTgsNFhqzjqP";
 	// private final String jwtIssuer = "example.io";
 
 	public String getToken() {
 		String token = null;
-		var authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication  authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication != null) {
 			token = (String) authentication.getCredentials();
 		}
@@ -68,10 +70,10 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	// generate token for user
-	public String generateToken(Object userDetails) {
-		Map<String, Object> claims = new HashMap<>();
-		return doGenerateToken(claims, "userDetails"/* .getUsername() */);
-	}
+	// public String generateToken(Object userDetails) {
+	// 	Map<String, Object> claims = new HashMap<>();
+	// 	return doGenerateToken(claims, "userDetails"/* .getUsername() */);
+	// }
 
 	// while creating the token -
 	// 1. Define claims of the token, like Issuer, Expiration, Subject, and the ID
@@ -82,7 +84,7 @@ public class JwtTokenUtil implements Serializable {
 	public String doGenerateToken(Map<String, Object> claims, String subject) {
 
 		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+				.setExpiration(new Date(System.currentTimeMillis() + refreshExpirationDateInMs))
 				.signWith(SignatureAlgorithm.HS512, secret).compact();
 	}
 
