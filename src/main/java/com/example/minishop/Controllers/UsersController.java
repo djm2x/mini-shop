@@ -15,7 +15,7 @@ import com.example.minishop.configuration.security.JwtTokenUtil;
 import com.example.minishop.models.*;
 import com.example.minishop.repositories.UowService;
 
-@RolesAllowed({ "admin", "user" })
+// @RolesAllowed({ "admin", "user" })
 @RestController
 @RequestMapping("api/users")
 public class UsersController extends SuperController<User, Long> {

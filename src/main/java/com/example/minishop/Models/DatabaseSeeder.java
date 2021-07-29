@@ -22,7 +22,7 @@ import com.example.minishop.repositories.UowService;
 import com.example.minishop.repositories.UsersRepository;
 import com.github.javafaker.Faker;
 
-@Component
+// @Component
 public class DatabaseSeeder  /*implements ApplicationRunner*/ {
 
     // private Logger logger = Logger.getLogger(DatabaseSeeder.class);

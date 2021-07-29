@@ -33,8 +33,8 @@ public class SwaggerConfig {
                 ;
 
         final Info info = new Info()
-                .title("CRS Rest Api")
-                .description("Rest Api for Club Ranking System")
+                .title("MINI-SHOP Rest Api")
+                .description("Rest Api for MINI-SHOP")
                 .version("1.0")
                 ;
 
