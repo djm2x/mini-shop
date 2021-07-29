@@ -36,18 +36,6 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    @Autowired
-    private UsersRepository userRepo;
-
-    // public JwtTokenFilter(
-    //                       UsersRepository userRepo,
-    //                       JwtTokenUtil jwtTokenUtil) {
-    //     super();
-
-    //     this.userRepo = userRepo;
-    //     this.jwtTokenUtil = jwtTokenUtil;
-    // }
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -68,16 +56,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             return;
         }
 
-
-        // Get user identity and set it on the spring security context
-        // UserDetails userDetails = userRepo
-        //         .findByUsername(jwtTokenUtil.getUsername(token))
-        //         .orElse(null)
-        //         ;
-
-
-        String email = jwtTokenUtil.getByClaim(token, "email");
-        String role = jwtTokenUtil.getByClaim(token, "role");
+        String email = "dj-m2x@hotmail.com"; // jwtTokenUtil.getByClaim(token, "email");
+        String role = "admin"; // jwtTokenUtil.getByClaim(token, "role");
 
         List<GrantedAuthority> list = List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
